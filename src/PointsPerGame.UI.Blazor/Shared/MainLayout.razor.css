@@ -1,0 +1,10 @@
+.site-shell {
+    padding: 0.9rem 1rem 1.25rem clamp(1rem, 5vw, 4rem);
+}
+
+.site-toolbar {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 0.5rem;
+    width: min(100%, 64rem);
+}

@@ -1,0 +1,37 @@
+@inject IJSRuntime JSRuntime
+
+<div class="theme-control">
+    <label for="theme-select">Theme</label>
+    <select id="theme-select" value="@theme" @onchange="ChangeThemeAsync" aria-label="Colour theme">
+        <option value="system">System</option>
+        <option value="light">Light</option>
+        <option value="dark">Dark</option>
+    </select>
+</div>
+
+@code {
+    private string theme = "system";
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+        {
+            return;
+        }
+
+        theme = await JSRuntime.InvokeAsync<string>("ppgTheme.getPreference");
+        StateHasChanged();
+    }
+
+    private async Task ChangeThemeAsync(ChangeEventArgs args)
+    {
+        var selectedTheme = args.Value?.ToString();
+        if (selectedTheme is not ("system" or "light" or "dark"))
+        {
+            return;
+        }
+
+        theme = selectedTheme;
+        await JSRuntime.InvokeVoidAsync("ppgTheme.setPreference", theme);
+    }
+}
