@@ -4,7 +4,8 @@
 
 .site-toolbar {
     display: flex;
+    float: right;
     justify-content: flex-end;
     margin-bottom: 0.5rem;
-    width: min(100%, 64rem);
+    margin-right: max(0rem, calc(100% - 64rem));
 }

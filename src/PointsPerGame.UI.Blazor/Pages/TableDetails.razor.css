@@ -5,9 +5,11 @@ h1 {
 }
 
 .table-navigation {
+    align-items: center;
     display: flex;
     gap: 1rem;
     margin-bottom: 0.75rem;
+    min-height: 2rem;
 }
 
 .table-scroll {
