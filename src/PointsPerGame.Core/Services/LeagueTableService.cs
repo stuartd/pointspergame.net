@@ -26,11 +26,16 @@ public sealed class LeagueTableService(IResultsDataSource dataSource) : ILeagueT
 		foreach (var sourceLeague in leagues)
 		{
 			var leagueResults = await dataSource.GetResultsAsync(sourceLeague);
-			results.AddRange(leagueResults.Select(RecordPointsDeduction));
+			results.AddRange(leagueResults.Select(GetTeamDisplayName).Select(RecordPointsDeduction));
 		}
 
 		return [.. results.SortTeams(pointsForWin)];
 	}
+
+	private static TeamResults GetTeamDisplayName(TeamResults team) =>
+		team with { 
+			TeamName = TeamNameAliases.GetTeamDisplayName(team.TeamName)
+		};
 
 	private static TeamResults RecordPointsDeduction(TeamResults team)
 	{

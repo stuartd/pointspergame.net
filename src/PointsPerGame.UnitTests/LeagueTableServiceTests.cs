@@ -102,6 +102,20 @@ public class LeagueTableServiceTests
 	}
 
 	[Test]
+	public async Task GetResultsAsync_Uses_Short_Team_Name_Alias()
+	{
+		var dataSource = new StubDataSource();
+		dataSource.SetResults(
+			TableSelection.EnglishPremierLeague,
+			Team("AFC Bournemouth", points: 3, played: 1));
+		var service = new LeagueTableService(dataSource);
+
+		var results = await service.GetResultsAsync(TableSelection.EnglishPremierLeague);
+
+		results.Single().TeamName.ShouldBe("Bournemouth");
+	}
+
+	[Test]
 	public async Task GetResultsAsync_Records_All_Point_Deductions_And_Sorts_By_Points_Before_Deduction()
 	{
 		var dataSource = new StubDataSource();
