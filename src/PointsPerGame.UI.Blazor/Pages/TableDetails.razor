@@ -7,14 +7,13 @@
 <PageTitle>@PageTitle</PageTitle>
 
 <nav class="table-navigation" aria-label="Table links">
-    <a href="/">Home</a>
+    <a class="home-link" href="/">Home</a>
+    <h1>@PageTitle</h1>
     @if (sourceUrl != null)
     {
-        <a href="@sourceUrl" target="_blank" rel="noopener noreferrer">Source data</a>
+        <a class="source-link" href="@sourceUrl" target="_blank" rel="noopener noreferrer">Source data</a>
     }
 </nav>
-
-<h1>@PageTitle</h1>
 
 @if (rows == null)
 {
