@@ -32,6 +32,10 @@ h1 {
     width: var(--team-column-width);
 }
 
+.teamTable col.crest-column {
+    width: 2.4rem;
+}
+
 .teamTable col.position-column {
     width: 2.75rem;
 }
@@ -152,6 +156,10 @@ h1 {
     .teamTable th:not(.team-column),
     .teamTable td:not(.team-column) {
         padding-inline: 0.05rem;
+    }
+
+    .teamTable col.crest-column {
+        width: 1rem;
     }
 
     .teamTable td.team-column {

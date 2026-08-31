@@ -29,14 +29,14 @@ else
     <div class="table-scroll">
         <table class="teamTable">
             <colgroup>
-                <col class="stat-column" />
+                <col class="crest-column" />
                 <col class="position-column" />
                 <col class="team-column" />
                 <col class="stat-column" span="7" />
             </colgroup>
             <thead>
             <tr>
-                <th></th>
+                <th class="crest-column"></th>
                 <th class="position-column" aria-label="Position"></th>
                 <th class="team-column">Team</th>
                 <th>
@@ -75,7 +75,7 @@ else
                 var r = rows[rowIndex];
                 var footnoteNumber = GetPointDeductionFootnoteNumber(r);
                 <tr id="@(footnoteNumber > 0 ? $"point-deduction-team-{footnoteNumber}" : null)">
-                    <td><img src="@r.TeamCrest" alt="" /></td>
+                    <td class="crest-column"><img src="@r.TeamCrest" alt="" /></td>
                     <td class="position-column">@(rowIndex + 1)</td>
                     <td class="team-column">
                         @if (string.IsNullOrWhiteSpace(r.TeamUrl))
