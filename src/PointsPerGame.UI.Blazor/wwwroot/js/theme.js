@@ -4,17 +4,6 @@
     const requestedMode = new URLSearchParams(window.location.search).get("mode");
     let mode = requestedMode;
 
-    if (requestedMode === "system") {
-        try {
-            localStorage.removeItem(storageKey);
-        } catch {
-            // The system theme still applies when storage is unavailable.
-        }
-
-        document.documentElement.removeAttribute("data-theme");
-        return;
-    }
-
     if (supportedModes.includes(requestedMode)) {
         try {
             localStorage.setItem(storageKey, requestedMode);

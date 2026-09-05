@@ -42,30 +42,6 @@
     --text-color: #e8e8e8;
 }
 
-@media (prefers-color-scheme: dark) {
-    :root:not([data-theme]) {
-        color-scheme: dark;
-        --error-background: #812727;
-        --error-heading: #ff9999;
-        --focus-offset: #151515;
-        --focus-ring: #73bfff;
-        --heading-color: #f2f2f2;
-        --link-color: #c9c9c9;
-        --link-hover: #ffffff;
-        --muted-text: #aaaaaa;
-        --notice-background: #342d13;
-        --notice-border: #806c25;
-        --notice-text: #fff0ad;
-        --page-background: #151515;
-        --table-border: #444444;
-        --table-heading-background: #333333;
-        --table-heading-text: #f2f2f2;
-        --table-row-even: #1e1e1e;
-        --table-row-odd: #262626;
-        --text-color: #e8e8e8;
-    }
-}
-
 html {
     background-color: var(--page-background);
 }
