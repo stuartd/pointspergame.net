@@ -1,6 +1,6 @@
 using System.Reflection;
 
-namespace PointsPerGame.Core.Services;
+
 
 public static class GetLastCommitService
 {
@@ -10,6 +10,7 @@ public static class GetLastCommitService
             .GetCustomAttribute<AssemblyInformationalVersionAttribute>()
             ?.InformationalVersion;
 
-        return version?.Split('+', 2).ElementAtOrDefault(1);
+        var commitId = version?.Split('+', 2).ElementAtOrDefault(1);
+        return commitId?[7..] ?? "Unavailable";
     }
 }
