@@ -1,6 +1,7 @@
 @page "/"
 @page "/tables"
 @using PointsPerGame.UI.Blazor.Services
+@using PointsPerGame.Core.Services
 @inject Services.TablesService TablesService
 
 <PageTitle>Points Per Game</PageTitle>
@@ -43,7 +44,7 @@ else
    <br /> 
 
    <h2>Appearance</h2>
-   <text>The page defaults to light mode. You can choose a theme with these links:</text>
+   <text>The site defaults to light mode, you can change the theme with these links:</text>
     <br />    <br /> 
     <text><a href="/?mode=light" target="_top">Light mode</a></text>
     <br />     <br /> 
@@ -58,6 +59,11 @@ else
     <br /> 
 
     <a href="https://github.com/stuartd/pointspergame.net">Site code (GitHub)</a>
+
+    <br />
+    <br /> 
+    <text>Build ID - @GetLastCommitService.GetLastCommitId()</text>
+
 }
 
 @code {
