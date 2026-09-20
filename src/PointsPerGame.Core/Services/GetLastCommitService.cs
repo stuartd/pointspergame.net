@@ -1,16 +1,20 @@
 using System.Reflection;
 
-
-
-public static class GetLastCommitService
+namespace PointsPerGame.Core.Services
 {
-    public static string? GetLastCommitId()
+    public static class GetLastCommitService
     {
-        var version = Assembly.GetExecutingAssembly()
-            .GetCustomAttribute<AssemblyInformationalVersionAttribute>()
-            ?.InformationalVersion;
+        public static string LastShortCommitId
+        {
+            get
+            {
+                var version = Assembly.GetExecutingAssembly()
+                    .GetCustomAttribute<AssemblyInformationalVersionAttribute>()
+                    ?.InformationalVersion;
 
-        var commitId = version?.Split('+', 2).ElementAtOrDefault(1);
-        return commitId?[..7] ?? "Unavailable";
+                var commitId = version?.Split('+', 2).ElementAtOrDefault(1);
+                return commitId?[..7] ?? "Unavailable";
+            }
+        }
     }
 }
