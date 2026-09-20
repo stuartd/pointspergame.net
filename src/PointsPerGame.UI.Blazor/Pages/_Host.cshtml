@@ -19,6 +19,11 @@
 <body>
 <component type="typeof(App)" render-mode="ServerPrerendered"/>
 
+<div id="components-reconnect-modal" class="components-reconnect-hide notice" role="status" aria-live="polite">
+    @* Placeholder for the custom reconnect message. *@
+    The ref is checking his watch... reconnecting
+</div>
+
 <div id="blazor-error-ui">
     <environment include="Staging,Production">
         An error has occurred. This application may no longer respond until reloaded.
