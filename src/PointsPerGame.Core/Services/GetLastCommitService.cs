@@ -11,6 +11,6 @@ public static class GetLastCommitService
             ?.InformationalVersion;
 
         var commitId = version?.Split('+', 2).ElementAtOrDefault(1);
-        return commitId?[7..] ?? "Unavailable";
+        return commitId?[..7] ?? "Unavailable";
     }
 }
