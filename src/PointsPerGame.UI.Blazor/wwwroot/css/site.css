@@ -146,6 +146,20 @@ a:focus {
 #components-reconnect-modal.components-reconnect-show,
 #components-reconnect-modal.components-reconnect-retrying,
 #components-reconnect-modal.components-reconnect-failed,
-#components-reconnect-modal.components-reconnect-rejected {
+#components-reconnect-modal.components-reconnect-rejected,
+#components-reconnect-modal.components-reconnect-resume-failed {
     display: block;
+}
+
+#components-reconnect-modal .reconnect-failed,
+#components-reconnect-modal.components-reconnect-failed .reconnect-progress,
+#components-reconnect-modal.components-reconnect-rejected .reconnect-progress,
+#components-reconnect-modal.components-reconnect-resume-failed .reconnect-progress {
+    display: none;
+}
+
+#components-reconnect-modal.components-reconnect-failed .reconnect-failed,
+#components-reconnect-modal.components-reconnect-rejected .reconnect-failed,
+#components-reconnect-modal.components-reconnect-resume-failed .reconnect-failed {
+    display: inline;
 }

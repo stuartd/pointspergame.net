@@ -20,7 +20,8 @@
 <component type="typeof(App)" render-mode="ServerPrerendered"/>
 
 <div id="components-reconnect-modal" class="components-reconnect-hide notice" role="status" aria-live="polite">
-    Reconnecting to the server (the ref is checking his watch!)
+    <span class="reconnect-progress">Reconnecting to the server (the ref is checking his watch!)</span>
+    <span class="reconnect-failed">The connection could not be restored. <a href="" onclick="window.location.reload(); return false;">Reload the page</a> to reconnect.</span>
 </div>
 
 <div id="blazor-error-ui">
@@ -34,6 +35,7 @@
     <a class="dismiss">Close</a>
 </div>
 
-<script src="_framework/blazor.server.js"></script>
+<script src="_framework/blazor.server.js" autostart="false"></script>
+<script src="~/js/reconnect.js" asp-append-version="true"></script>
 </body>
 </html>
