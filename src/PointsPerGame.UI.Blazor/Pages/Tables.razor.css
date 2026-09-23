@@ -4,6 +4,8 @@
 }
 
 .body-text {
+    display: inline-block;
+    max-width: 75ch;
     font-size: 1.125rem;
     line-height: 1.5;
 }
