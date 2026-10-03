@@ -10,6 +10,14 @@
     line-height: 1.5;
 }
 
+.body-code {
+    display: inline-block;
+    padding-left: 0.35rem;
+    max-width: 75ch;
+    font-size: 1.125rem;
+    line-height: 1.5;
+}
+
 a {
     font-size: 1.125rem;
     line-height: 1.5;
