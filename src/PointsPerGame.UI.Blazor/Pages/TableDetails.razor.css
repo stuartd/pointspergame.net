@@ -47,11 +47,11 @@ h1 {
 }
 
 .teamTable col.crest-column {
-    width: 2.4rem;
+    width: 1.8rem;
 }
 
 .teamTable col.position-column {
-    width: 2.75rem;
+    width: 2rem;
 }
 
 .teamTable th,
@@ -64,13 +64,14 @@ h1 {
 
 .teamTable th.team-column,
 .teamTable td.team-column {
+    padding-left: 0.15rem;
     text-align: left;
 }
 
 .teamTable th.position-column,
 .teamTable td.position-column {
     padding-left: 0;
-    padding-right: 0.75rem;
+    padding-right: 0.35rem;
     text-align: right;
 }
 
