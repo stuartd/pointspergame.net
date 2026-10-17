@@ -62,6 +62,11 @@ h1 {
     white-space: nowrap;
 }
 
+.teamTable th.crest-column,
+.teamTable td.crest-column {
+    padding-inline: 0.15rem;
+}
+
 .teamTable th.team-column,
 .teamTable td.team-column {
     padding-left: 0.15rem;
