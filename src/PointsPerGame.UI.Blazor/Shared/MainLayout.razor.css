@@ -1,3 +1,12 @@
 .site-shell {
     padding: 0.25rem 1rem 1.25rem clamp(1rem, 5vw, 4rem);
 }
+
+@media (min-width: 64rem) {
+    .site-shell:has(> .table-scroll) {
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        min-height: calc(100dvh - 20px);
+    }
+}

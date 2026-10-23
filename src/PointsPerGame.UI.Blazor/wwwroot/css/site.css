@@ -163,3 +163,9 @@ a:focus {
 #components-reconnect-modal.components-reconnect-resume-failed .reconnect-failed {
     display: inline;
 }
+
+@media (min-width: 64rem) {
+    body:has(.table-scroll) {
+        box-sizing: border-box;
+    }
+}
