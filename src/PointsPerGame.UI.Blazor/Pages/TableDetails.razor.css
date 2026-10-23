@@ -205,3 +205,30 @@ h1 {
         display: inline;
     }
 }
+
+@media (min-width: 64rem) {
+    .table-navigation,
+    .table-scroll {
+        width: 100%;
+    }
+
+    .table-scroll {
+        display: flex;
+        flex: 1 0 auto;
+        flex-direction: column;
+    }
+
+    .teamTable {
+        /* Preserve the column proportions of the original 64rem table. */
+        --team-column-width: 24%;
+        flex: 1;
+    }
+
+    .teamTable col.crest-column {
+        width: 2.8125%;
+    }
+
+    .teamTable col.position-column {
+        width: 3.125%;
+    }
+}
