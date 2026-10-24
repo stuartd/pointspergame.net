@@ -1,7 +1,10 @@
 .site-shell {
-    margin-inline: auto;
     max-width: 42rem;
     padding: 0.25rem 1rem 1.25rem;
+}
+
+.site-shell:has(> .table-navigation) {
+    margin-inline: auto;
 }
 
 @media (min-width: 64rem) {
@@ -9,6 +12,7 @@
         box-sizing: border-box;
         display: flex;
         flex-direction: column;
+        max-width: 82rem;
         min-height: calc(100dvh - 20px);
     }
 }
