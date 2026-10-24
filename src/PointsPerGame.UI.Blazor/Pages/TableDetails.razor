@@ -3,6 +3,8 @@
 @using PointsPerGame.Core.Models
 @using PointsPerGame.UI.Blazor.Services
 @inject Services.TablesService TablesService
+@inject IJSRuntime JS
+@implements IAsyncDisposable
 
 <PageTitle>@PageTitle</PageTitle>
 
@@ -26,7 +28,7 @@ else if (errorMessage != null)
 else
 {
     <div class="table-scroll">
-        <table class="teamTable">
+        <table class="teamTable" @ref="teamTable">
             <colgroup>
                 <col class="crest-column" />
                 <col class="position-column" />
@@ -151,6 +153,10 @@ else
     private string? sourceUrl;
     private List<TeamResults> pointDeductions = [];
     private IReadOnlyList<string> unavailableTableNames = [];
+    private IReadOnlyList<string> teamNames = [];
+    private ElementReference teamTable;
+    private IJSObjectReference? teamColumnModule;
+    private bool measureTeamColumn;
 
     private string PageTitle => leagueName == null ? "League Table" : $"{leagueName}";
 
@@ -164,6 +170,7 @@ else
         pointDeductions = [];
         unavailableTableNames = [];
         errorMessage = null;
+        measureTeamColumn = false;
         leagueName = TablesService.GetLeagueName(LeagueId);
         sourceUrl = TablesService.GetLeagueSourceUrl(LeagueId);
 
@@ -177,6 +184,7 @@ else
         try
         {
             var tableData = await TablesService.GetLeagueTableAsync(LeagueId);
+            teamNames = await TablesService.GetTeamNamesAsync();
             rows = tableData.Rows;
             unavailableTableNames = tableData.UnavailableTableNames;
             pointDeductions = [.. rows.Where(r => r.PointsDeducted > 0)];
@@ -184,6 +192,10 @@ else
             if (rows.Count < 10)
             {
                 errorMessage = "League page not found or data unavailable.";
+            }
+            else
+            {
+                measureTeamColumn = true;
             }
         }
         catch (HttpRequestException exception) when (exception.StatusCode == HttpStatusCode.NotFound)
@@ -200,6 +212,30 @@ else
         {
             errorMessage = "League page not found or data unavailable.";
             rows = [];
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (measureTeamColumn)
+        {
+            measureTeamColumn = false;
+            teamColumnModule ??= await JS.InvokeAsync<IJSObjectReference>("import", "./js/team-column.js");
+            await teamColumnModule.InvokeVoidAsync("sizeTeamColumn", teamTable, teamNames);
+        }
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (teamColumnModule != null)
+        {
+            try
+            {
+                await teamColumnModule.DisposeAsync();
+            }
+            catch (JSDisconnectedException)
+            {
+            }
         }
     }
 

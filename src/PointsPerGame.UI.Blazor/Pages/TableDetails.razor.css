@@ -34,7 +34,7 @@ h1 {
 }
 
 .teamTable {
-    --team-column-width: clamp(12rem, 24cqi, 20rem);
+    --team-column-width: var(--measured-team-column-width, clamp(12rem, 24cqi, 20rem));
     border-collapse: collapse;
     font-size: 0.9rem;
     min-width: 38rem;
@@ -219,8 +219,7 @@ h1 {
     }
 
     .teamTable {
-        /* Preserve the column proportions of the original 64rem table. */
-        --team-column-width: 24%;
+        --team-column-width: var(--measured-team-column-width, 24%);
         flex: 1;
         font-size: clamp(1.0625rem, 1.25cqi, 1.125rem);
     }
