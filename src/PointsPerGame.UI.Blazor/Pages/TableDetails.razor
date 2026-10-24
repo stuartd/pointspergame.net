@@ -184,8 +184,8 @@ else
         try
         {
             var tableData = await TablesService.GetLeagueTableAsync(LeagueId);
-            teamNames = await TablesService.GetTeamNamesAsync();
             rows = tableData.Rows;
+            teamNames = [.. rows.Select(row => row.TeamName).Distinct(StringComparer.Ordinal).Order(StringComparer.Ordinal)];
             unavailableTableNames = tableData.UnavailableTableNames;
             pointDeductions = [.. rows.Where(r => r.PointsDeducted > 0)];
 

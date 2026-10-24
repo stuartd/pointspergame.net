@@ -13,7 +13,6 @@ builder.Services.AddScoped<ILeagueTableService, LeagueTableService>();
 builder.Services.AddScoped<IResultsDataSource, GuardianScraper>();
 builder.Services.AddScoped<TableAvailabilityChecker>();
 builder.Services.AddSingleton<TableAvailabilityCache>();
-builder.Services.AddSingleton<TeamNameCatalog>();
 builder.Services.AddHttpClient();
 builder.Services.Configure<ForwardedHeadersOptions>(options =>
 {

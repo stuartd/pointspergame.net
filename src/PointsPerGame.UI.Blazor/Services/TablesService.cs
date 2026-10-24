@@ -16,12 +16,8 @@ public sealed record LeagueTableData(
 
 public class TablesService(
     ILeagueTableService leagueTableService,
-    TableAvailabilityChecker tableAvailabilityChecker,
-    IResultsDataSource dataSource,
-    TeamNameCatalog teamNameCatalog)
+    TableAvailabilityChecker tableAvailabilityChecker)
 {
-    public ValueTask<IReadOnlyList<string>> GetTeamNamesAsync() => teamNameCatalog.GetNamesAsync(dataSource);
-
     public async ValueTask<IReadOnlyList<LeagueLink>> GetLeagueLinksAsync()
     {
         var availability = await tableAvailabilityChecker.CheckAllAsync();
