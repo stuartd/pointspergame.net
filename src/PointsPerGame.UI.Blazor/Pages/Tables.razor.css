@@ -34,13 +34,13 @@
 
 .table-links {
     display: grid;
-    gap: 2rem 4rem;
+    gap: 1rem 4rem;
     grid-template-columns: minmax(0, 1fr);
 }
 
 .league-group h3 {
     color: var(--heading-color);
-    font-size: 1rem;
+    font-size: 1.3125rem;
     line-height: 1.5;
     margin: 0 0 0.5rem;
 }
