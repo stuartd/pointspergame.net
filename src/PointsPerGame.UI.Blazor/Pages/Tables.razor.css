@@ -16,6 +16,16 @@
     margin-top: 2.5rem;
 }
 
+.intro-divider {
+    border: 0;
+    border-top: 1px solid var(--table-border);
+    margin: 1.25rem 0;
+}
+
+.intro-divider + .page-section {
+    margin-top: 0;
+}
+
 .page-section h2 {
     font-size: 1.5rem;
     line-height: 1.25;
@@ -84,6 +94,22 @@ a {
     flex-wrap: wrap;
     gap: 0.5rem 1.5rem;
     margin-bottom: 0;
+}
+
+@media (width < 48rem) {
+    .intro-divider {
+        margin-block: 0.75rem;
+    }
+
+    .league-group li + li {
+        margin-top: 0;
+    }
+
+    .league-group a,
+    .unavailable-link {
+        line-height: 1.4;
+        padding-block: 0;
+    }
 }
 
 @media (min-width: 48rem) {
