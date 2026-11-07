@@ -25,5 +25,6 @@ a {
 
 .tagline {
     font-size: 1.125rem;
-    color: var(--muted-text);
+    font-weight: 600;
+    color: var(--text-color);
 }
