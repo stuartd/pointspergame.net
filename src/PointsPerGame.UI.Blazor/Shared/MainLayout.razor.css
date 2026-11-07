@@ -7,6 +7,11 @@
     margin-inline: auto;
 }
 
+.site-shell:has(> .home-page) {
+    max-width: 48rem;
+    padding: clamp(1.5rem, 3vw, 2.5rem) clamp(1.25rem, 5vw, 6rem) 3rem;
+}
+
 @media (min-width: 64rem) {
     .site-shell:has(> .table-scroll) {
         box-sizing: border-box;

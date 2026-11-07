@@ -1,30 +1,93 @@
+.page-intro h1 {
+    font-size: clamp(2rem, 3vw, 2.5rem);
+    line-height: 1.15;
+    margin: 0;
+}
+
+.tagline {
+    color: var(--text-color);
+    font-size: 1.125rem;
+    font-weight: 600;
+    line-height: 1.5;
+    margin: 0.75rem 0 0;
+}
+
+.page-section {
+    margin-top: 2.5rem;
+}
+
+.page-section h2 {
+    font-size: 1.5rem;
+    line-height: 1.25;
+    margin: 0 0 1rem;
+}
+
 .table-links {
+    display: grid;
+    gap: 2rem 4rem;
+    grid-template-columns: minmax(0, 1fr);
+}
+
+.league-group h3 {
+    color: var(--heading-color);
     font-size: 1rem;
+    line-height: 1.5;
+    margin: 0 0 0.5rem;
+}
+
+.league-group ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.league-group li + li {
+    margin-top: 0.25rem;
+}
+
+.league-group a,
+.unavailable-link {
+    display: inline-block;
+    padding-block: 0.15rem;
+}
+
+.unavailable-link {
+    color: var(--muted-text);
+    font-size: 1.125rem;
     line-height: 1.5;
 }
 
 .body-text {
-    display: inline-block;
-    max-width: 75ch;
+    max-width: 65ch;
     font-size: 1.125rem;
-    line-height: 1.5;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.body-text + .body-text,
+.utility-links {
+    margin-top: 1rem;
 }
 
 .body-code {
-    display: inline-block;
-    padding-left: 0.35rem;
-    max-width: 75ch;
-    font-size: 1.125rem;
-    line-height: 1.5;
+    font-size: 1rem;
 }
 
 a {
     font-size: 1.125rem;
     line-height: 1.5;
+    text-underline-offset: 0.15em;
 }
 
-.tagline {
-    font-size: 1.125rem;
-    font-weight: 600;
-    color: var(--text-color);
+.utility-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    margin-bottom: 0;
+}
+
+@media (min-width: 48rem) {
+    .table-links {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
 }

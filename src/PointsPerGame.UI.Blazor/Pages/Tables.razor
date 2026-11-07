@@ -2,81 +2,108 @@
 @page "/tables"
 @using PointsPerGame.UI.Blazor.Services
 @using PointsPerGame.Core.Services
+@using PointsPerGame.Core.Extensions
+@using PointsPerGame.Core.Names
 @inject Services.TablesService TablesService
 
 <PageTitle>Points Per Game</PageTitle>
 
-<h1>Points Per Game</h1>
+<div class="home-page">
+    <header class="page-intro">
+        <h1>Points Per Game</h1>
+        <p class="tagline">Football league tables, sorted by points per game.</p>
+    </header>
 
-<p class="tagline">Football league tables, sorted by points per game.</p>
+    <section class="page-section" aria-labelledby="tables-heading">
+        <h2 id="tables-heading">Tables</h2>
 
-<h2>Tables</h2>
-
-@if (links == null)
-{
-    <p>Loading...</p>
-}
-else
-{
-    <div class="table-links">
-        @foreach (var link in links)
+        @if (links == null)
         {
-            @if (link.IsAvailable)
-            {
-                <a href="/tables/@link.Id">@link.Name</a>
-            }
-            else
-            {
-                <span>@link.Name (source unavailable)</span>
-            }
-            <br />
+            <p class="body-text">Loading...</p>
         }
-    </div>
+        else
+        {
+            <nav class="table-links" aria-label="League tables">
+                @foreach (var group in leagueGroups)
+                {
+                    <section class="league-group" aria-labelledby="@group.Id">
+                        <h3 id="@group.Id">@group.Name</h3>
+                        <ul>
+                            @foreach (var link in links.Where(link => group.Leagues.Contains((TableSelection)link.Id)))
+                            {
+                                <li>
+                                    @if (link.IsAvailable)
+                                    {
+                                        <a href="/tables/@link.Id">@link.Name</a>
+                                    }
+                                    else
+                                    {
+                                        <span class="unavailable-link">@link.Name (source unavailable)</span>
+                                    }
+                                </li>
+                            }
+                        </ul>
+                    </section>
+                }
+            </nav>
+        }
+    </section>
 
-    <br /> 
-    <h2>Sorting</h2>
-    <span class="body-text">Teams are sorted by points per game, then by the number of games played, then goal difference and finally by team name.</span>
+    @if (links != null)
+    {
+        <section class="page-section" aria-labelledby="sorting-heading">
+            <h2 id="sorting-heading">Sorting</h2>
+            <p class="body-text">Teams are sorted by points per game, then by the number of games played, then goal difference and finally by team name.</p>
+            <p class="body-text">Points per game is calculated from the points earned through wins and draws before any points deduction (which have footnotes).</p>
+            <p class="body-text">The exception is that if teams have won all their games - which only really happens at the start of the season - then the team which
+                has played more games is sorted higher: 9 points from 3 games beats 6 points from 2 games, regardless of goal difference.</p>
+        </section>
 
-    <br />    <br /> 
-    <span class="body-text">Points per game is calculated from the points earned through wins and draws before any points deduction (which have footnotes).</span>
+        <section class="page-section" aria-labelledby="appearance-heading">
+            <h2 id="appearance-heading">Appearance</h2>
+            <p class="body-text">The site defaults to a light theme, you can change the theme with these links:</p>
+            <p class="utility-links">
+                <a href="/?mode=light" target="_top">Light theme</a>
+                <a href="/?mode=dark" target="_top">Dark theme</a>
+            </p>
+        </section>
 
-    <br />   <br /> 
-    <span class="body-text">The exception is that if teams have won all their games - which only really happens at the start of the season - then the team which
-         has played more games is sorted higher: 9 points from 3 games beats 6 points from 2 games, regardless of goal difference.</span>
+        <section class="page-section" aria-labelledby="contact-heading">
+            <h2 id="contact-heading">Contact</h2>
+            <p class="body-text">Having a problem? Got any ideas for improvements?</p>
+            <p class="body-text"><a href="mailto:stuartd.dev+ppg@gmail.com">Send me an email!</a></p>
+        </section>
 
-   <br />
-   <h2>Appearance</h2>
-   <span class="body-text">The site defaults to a light theme, you can change the theme with these links:</span>
-    <br />   <br /> 
-    <text><a href="/?mode=light" target="_top">Light theme</a></text>
-     <br /> 
-     <text><a href="/?mode=dark" target="_top">Dark theme</a></text>
+        <section class="page-section" aria-labelledby="testimonial-heading">
+            <h2 id="testimonial-heading">Testimonial</h2>
+            <p class="body-text"><i>"All league tables should be ranked like this"</i> - jimmason4, 2014</p>
+        </section>
 
-    <br /> 
-    <h2>Contact</h2>
+        <section class="page-section" aria-labelledby="history-heading">
+            <h2 id="history-heading">History</h2>
+            <p class="body-text"><a href="https://web.archive.org/web/20101023000451/http://justkeepswimming.net/tables">Established in 2010</a></p>
+        </section>
 
-    <span class="body-text">Having a problem? Got any ideas for improvements?</span>
-     <br />
-    <text><a href="mailto:stuartd.dev+ppg@gmail.com">Send me an email!</a></text>
-
-    <br /> 
-    <h2>Testimonial</h2>
-    
-    <span class="body-text"><i>"All league tables should be ranked like this"</i> - jimmason4, 2014</span>
-
-    <br /> 
-    <h2>History</h2>
-    <text>
-        <a href="https://web.archive.org/web/20101023000451/http://justkeepswimming.net/tables">Established in 2010</a>
-    </text>
-
-    <br /> 
-    <h2>About</h2>
-    <span class="body-text">Build: </span><code class="body-code">@GetLastCommitService.LastShortCommitId</code><br />
-    <text><a href="https://github.com/stuartd/pointspergame.net">Site code</a></text><br />
-}
+        <section class="page-section" aria-labelledby="about-heading">
+            <h2 id="about-heading">About</h2>
+            <p class="body-text">Build: <code class="body-code">@GetLastCommitService.LastShortCommitId</code></p>
+            <p class="body-text"><a href="https://github.com/stuartd/pointspergame.net">Site code</a></p>
+        </section>
+    }
+</div>
 
 @code {
+    private static readonly (string Name, string Id, TableSelection[] Leagues)[] leagueGroups =
+    [
+        ("England", "england-leagues", [.. LeagueLists.AllEnglishDivisions, TableSelection.WSL]),
+        ("Scotland", "scotland-leagues", LeagueLists.AllScottishDivisions),
+        ("Other European leagues", "european-leagues", [.. LeagueLists.AllLeagues
+            .Except(LeagueLists.AllEnglishDivisions)
+            .Except(LeagueLists.AllScottishDivisions)
+            .Where(league => league != TableSelection.WSL)]),
+        ("Combined tables", "combined-tables", [.. Enum.GetValues<TableSelection>().Where(league => league.IsMultiLeague())]),
+    ];
+
     private IReadOnlyList<LeagueLink>? links;
 
     protected override async Task OnInitializedAsync()
