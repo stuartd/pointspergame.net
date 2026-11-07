@@ -22,3 +22,8 @@ a {
     font-size: 1.125rem;
     line-height: 1.5;
 }
+
+.tagline {
+    font-size: 1.125rem;
+    color: var(--muted-text);
+}
