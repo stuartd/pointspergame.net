@@ -2,6 +2,7 @@ using PointsPerGame.Core.Mappings;
 using PointsPerGame.Core.Models;
 using PointsPerGame.Core.Names;
 using PointsPerGame.Core.Services;
+using PointsPerGame.Core.Web;
 using System.ComponentModel;
 using System.Reflection;
 using PointsPerGame.Core.Extensions;
@@ -16,7 +17,8 @@ public sealed record LeagueTableData(
 
 public class TablesService(
     ILeagueTableService leagueTableService,
-    TableAvailabilityChecker tableAvailabilityChecker)
+    TableAvailabilityChecker tableAvailabilityChecker,
+    GuardianScraper guardianScraper)
 {
     public async ValueTask<IReadOnlyList<LeagueLink>> GetLeagueLinksAsync()
     {
@@ -49,7 +51,7 @@ public class TablesService(
             : GuardianLeagueMappings.GetUriForLeague(league);
     }
 
-    public async Task<LeagueTableData> GetLeagueTableAsync(int leagueId)
+    public async Task<LeagueTableData> GetLeagueTableAsync(int leagueId, bool useMatchPages = false)
     {
         if (!IsKnownLeague(leagueId))
         {
@@ -61,6 +63,10 @@ public class TablesService(
             ? (await tableAvailabilityChecker.CheckAllAsync()).GetUnavailableTablesFor(league)
             : [];
         var rows = await leagueTableService.GetResultsAsync(league, unavailableTables);
+        if (useMatchPages)
+        {
+            rows = await guardianScraper.WithTodaysMatchLinksAsync(rows);
+        }
 
         return new(rows, [.. unavailableTables.Select(GetLeagueDescription)]);
     }

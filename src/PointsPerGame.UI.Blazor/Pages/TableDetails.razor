@@ -3,6 +3,7 @@
 @using PointsPerGame.Core.Models
 @using PointsPerGame.UI.Blazor.Services
 @inject Services.TablesService TablesService
+@inject IJSRuntime JSRuntime
 
 <PageTitle>@PageTitle</PageTitle>
 
@@ -88,7 +89,7 @@ else
                         @if (r.PointsDeducted > 0)
                         {
                             <sup class="point-deduction-marker" id="point-deduction-reference-@footnoteNumber">
-                                <a href="/tables/@LeagueId#point-deduction-@footnoteNumber" title="Deducted @FormatPoints(r.PointsDeducted)" aria-label="View points deduction note for @r.TeamName">@footnoteNumber</a>
+                                <a href="@TableUrl#point-deduction-@footnoteNumber" title="Deducted @FormatPoints(r.PointsDeducted)" aria-label="View points deduction note for @r.TeamName">@footnoteNumber</a>
                             </sup>
                         }
                     </td>
@@ -113,7 +114,7 @@ else
                     var team = pointDeductions[index];
                     <li id="point-deduction-@footnoteNumber">
                         <sup class="point-deduction-reference">
-                            <a href="/tables/@LeagueId#point-deduction-team-@footnoteNumber" title="Go to @team.TeamName in the table" aria-label="Go to @team.TeamName in the table">@footnoteNumber</a>
+                            <a href="@TableUrl#point-deduction-team-@footnoteNumber" title="Go to @team.TeamName in the table" aria-label="Go to @team.TeamName in the table">@footnoteNumber</a>
                         </sup>
                         Deducted @FormatPoints(team.PointsDeducted)
                     </li>
@@ -142,8 +143,13 @@ else
 }
 
 @code {
+    private const string MatchPageStorageKey = "points-per-game-match-page";
+
     [Parameter]
     public int LeagueId { get; set; }
+
+    [SupplyParameterFromQuery(Name = "match-page")]
+    private string? MatchPage { get; set; }
 
     private IReadOnlyList<TeamResults>? rows;
     private string? leagueName;
@@ -151,8 +157,18 @@ else
     private string? sourceUrl;
     private List<TeamResults> pointDeductions = [];
     private IReadOnlyList<string> unavailableTableNames = [];
+    private int loadVersion;
 
     private string PageTitle => leagueName == null ? "League Table" : $"{leagueName}";
+
+    private bool? RequestedMatchPages => bool.TryParse(MatchPage, out var enabled) ? enabled : null;
+
+    private string TableUrl => $"/tables/{LeagueId}" + (RequestedMatchPages switch
+    {
+        true => "?match-page=true",
+        false => "?match-page=false",
+        null => ""
+    });
 
     private bool HasIncompleteTeamDetails => rows?.Any(team =>
         string.IsNullOrWhiteSpace(team.TeamCrest) ||
@@ -160,6 +176,7 @@ else
 
     protected override async Task OnParametersSetAsync()
     {
+        var requestVersion = ++loadVersion;
         rows = null;
         pointDeductions = [];
         unavailableTableNames = [];
@@ -174,33 +191,68 @@ else
             return;
         }
 
+        var useMatchPages = await ResolveMatchPagePreferenceAsync();
+        if (requestVersion != loadVersion)
+        {
+            return;
+        }
+
+        LeagueTableData tableData = new([], []);
+        string? tableError = null;
         try
         {
-            var tableData = await TablesService.GetLeagueTableAsync(LeagueId);
-            rows = tableData.Rows;
-            unavailableTableNames = tableData.UnavailableTableNames;
-            pointDeductions = [.. rows.Where(r => r.PointsDeducted > 0)];
-
-            if (rows.Count < 10)
-            {
-                errorMessage = "League page not found or data unavailable.";
-            }
+            tableData = await TablesService.GetLeagueTableAsync(LeagueId, useMatchPages);
         }
         catch (HttpRequestException exception) when (exception.StatusCode == HttpStatusCode.NotFound)
         {
-            errorMessage = "League page not found or data unavailable.";
-            rows = [];
+            tableError = "League page not found or data unavailable.";
         }
         catch (HttpRequestException)
         {
-            errorMessage = "The table could not be loaded right now.";
-            rows = [];
+            tableError = "The table could not be loaded right now.";
         }
         catch (InvalidOperationException)
         {
-            errorMessage = "League page not found or data unavailable.";
-            rows = [];
+            tableError = "League page not found or data unavailable.";
         }
+
+        if (requestVersion != loadVersion)
+        {
+            return;
+        }
+
+        rows = tableData.Rows;
+        unavailableTableNames = tableData.UnavailableTableNames;
+        pointDeductions = [.. rows.Where(r => r.PointsDeducted > 0)];
+        errorMessage = tableError ?? (rows.Count < 10 ? "League page not found or data unavailable." : null);
+    }
+
+    private async ValueTask<bool> ResolveMatchPagePreferenceAsync()
+    {
+        var requested = RequestedMatchPages;
+        if (RendererInfo.IsInteractive)
+        {
+            try
+            {
+                switch (requested)
+                {
+                    case true:
+                        await JSRuntime.InvokeVoidAsync("localStorage.setItem", MatchPageStorageKey, "true");
+                        break;
+                    case false:
+                        await JSRuntime.InvokeVoidAsync("localStorage.removeItem", MatchPageStorageKey);
+                        break;
+                    case null:
+                        return await JSRuntime.InvokeAsync<string?>("localStorage.getItem", MatchPageStorageKey) == "true";
+                }
+            }
+            catch (Exception exception) when (exception is JSException or JSDisconnectedException)
+            {
+                // The URL still controls the current table when browser storage is unavailable.
+            }
+        }
+
+        return requested ?? false;
     }
 
     private int GetPointDeductionFootnoteNumber(TeamResults team) =>
