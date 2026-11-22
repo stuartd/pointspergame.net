@@ -36,7 +36,7 @@
                                 <li>
                                     @if (link.IsAvailable)
                                     {
-                                        <a href="/tables/@link.Id">@link.Name</a>
+                                        <a href="@GetTableUrl(link.Id)">@link.Name</a>
                                     }
                                     else
                                     {
@@ -118,7 +118,18 @@
         ("Combined tables", "combined-tables", [.. Enum.GetValues<TableSelection>().Where(league => league.IsMultiLeague())]),
     ];
 
+    [SupplyParameterFromQuery(Name = "match-page")]
+    private string? MatchPage { get; set; }
+
     private IReadOnlyList<LeagueLink>? links;
+
+    private string GetTableUrl(int leagueId)
+    {
+        var tableUrl = $"/tables/{leagueId}";
+        return bool.TryParse(MatchPage, out var enabled)
+            ? $"{tableUrl}?match-page={(enabled ? "true" : "false")}"
+            : tableUrl;
+    }
 
     protected override async Task OnInitializedAsync()
     {
