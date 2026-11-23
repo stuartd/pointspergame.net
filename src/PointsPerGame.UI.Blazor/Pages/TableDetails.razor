@@ -143,8 +143,6 @@ else
 }
 
 @code {
-    private const string MatchPageStorageKey = "points-per-game-match-page";
-
     [Parameter]
     public int LeagueId { get; set; }
 
@@ -191,7 +189,9 @@ else
             return;
         }
 
-        var useMatchPages = await ResolveMatchPagePreferenceAsync();
+        var useMatchPages = RendererInfo.IsInteractive
+            ? await MatchPagePreference.ResolveAsync(JSRuntime, RequestedMatchPages)
+            : RequestedMatchPages ?? false;
         if (requestVersion != loadVersion)
         {
             return;
@@ -225,34 +225,6 @@ else
         unavailableTableNames = tableData.UnavailableTableNames;
         pointDeductions = [.. rows.Where(r => r.PointsDeducted > 0)];
         errorMessage = tableError ?? (rows.Count < 10 ? "League page not found or data unavailable." : null);
-    }
-
-    private async ValueTask<bool> ResolveMatchPagePreferenceAsync()
-    {
-        var requested = RequestedMatchPages;
-        if (RendererInfo.IsInteractive)
-        {
-            try
-            {
-                switch (requested)
-                {
-                    case true:
-                        await JSRuntime.InvokeVoidAsync("localStorage.setItem", MatchPageStorageKey, "true");
-                        break;
-                    case false:
-                        await JSRuntime.InvokeVoidAsync("localStorage.removeItem", MatchPageStorageKey);
-                        break;
-                    case null:
-                        return await JSRuntime.InvokeAsync<string?>("localStorage.getItem", MatchPageStorageKey) == "true";
-                }
-            }
-            catch (Exception exception) when (exception is JSException or JSDisconnectedException)
-            {
-                // The URL still controls the current table when browser storage is unavailable.
-            }
-        }
-
-        return requested ?? false;
     }
 
     private int GetPointDeductionFootnoteNumber(TeamResults team) =>

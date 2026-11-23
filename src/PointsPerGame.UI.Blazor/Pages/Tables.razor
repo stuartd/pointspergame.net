@@ -5,6 +5,7 @@
 @using PointsPerGame.Core.Extensions
 @using PointsPerGame.Core.Names
 @inject Services.TablesService TablesService
+@inject IJSRuntime JSRuntime
 
 <PageTitle>Points Per Game</PageTitle>
 
@@ -76,6 +77,18 @@
 
         <hr class="intro-divider" />
 
+        <section class="page-section" aria-labelledby="experiments-heading">
+            <h2 id="experiments-heading">Experiments</h2>
+            <p class="utility-links">
+                <a href="/?match-page=true" target="_top">Team link opens today's match when available</a>
+                <a href="/?match-page=false" target="_top">Team link always open fixtures page</a>
+            </p>
+            <br />
+            <p class="body-text">Current setting: @MatchPageSetting</p>
+        </section>
+
+        <hr class="intro-divider" />
+
         <section class="page-section" aria-labelledby="contact-heading">
             <h2 id="contact-heading">Contact</h2>
             <p class="body-text">Having a problem? Got any ideas for improvements?</p>
@@ -122,11 +135,22 @@
     private string? MatchPage { get; set; }
 
     private IReadOnlyList<LeagueLink>? links;
+    private bool? useMatchPages;
+    private int preferenceVersion;
+
+    private bool? RequestedMatchPages => bool.TryParse(MatchPage, out var enabled) ? enabled : null;
+
+    private string MatchPageSetting => useMatchPages switch
+    {
+        true => "Today's match when available",
+        false => "Team fixtures",
+        null => "Loading…"
+    };
 
     private string GetTableUrl(int leagueId)
     {
         var tableUrl = $"/tables/{leagueId}";
-        return bool.TryParse(MatchPage, out var enabled)
+        return RequestedMatchPages is bool enabled
             ? $"{tableUrl}?match-page={(enabled ? "true" : "false")}"
             : tableUrl;
     }
@@ -134,5 +158,20 @@
     protected override async Task OnInitializedAsync()
     {
         links = await TablesService.GetLeagueLinksAsync();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        var version = ++preferenceVersion;
+        useMatchPages = RequestedMatchPages;
+
+        if (RendererInfo.IsInteractive)
+        {
+            var resolved = await MatchPagePreference.ResolveAsync(JSRuntime, useMatchPages);
+            if (version == preferenceVersion)
+            {
+                useMatchPages = resolved;
+            }
+        }
     }
 }
