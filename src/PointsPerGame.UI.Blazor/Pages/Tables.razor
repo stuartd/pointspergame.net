@@ -77,18 +77,6 @@
 
         <hr class="intro-divider" />
 
-        <section class="page-section" aria-labelledby="experiments-heading">
-            <h2 id="experiments-heading">Experiments</h2>
-            <p class="utility-links">
-                <a href="/?match-page=true" target="_top">Team link opens today's match when available</a>
-                <a href="/?match-page=false" target="_top">Team link always opens the fixtures page</a>
-            </p>
-            <br />
-            <p class="body-text">Current setting: @MatchPageSetting</p>
-        </section>
-
-        <hr class="intro-divider" />
-
         <section class="page-section" aria-labelledby="contact-heading">
             <h2 id="contact-heading">Contact</h2>
             <p class="body-text">Having a problem? Got any ideas for improvements?</p>
@@ -115,6 +103,23 @@
             <h2 id="about-heading">About</h2>
             <p class="body-text">Build: <code class="body-code">@GetLastCommitService.LastShortCommitId</code></p>
             <p class="body-text"><a href="https://github.com/stuartd/pointspergame.net">Site code</a></p>
+        </section>
+
+        <hr class="intro-divider" />
+
+        <section class="page-section" aria-labelledby="experiments-heading">
+            <h1 id="experiments-heading">Experimental features</h1>
+            <h2 id="experiments-team-link">Team link experiment</h2>
+            <br />
+            <p class="body-text">This experiment allows you to change how team links behave on the site.<br />
+                Click the links below to try it out or go back to the default.</p>
+            <br />
+            <p class="utility-links">
+                <a href="/?match-page=true" target="_top">[Experiment] The team link opens today's match page (when there is one)</a>
+                <a href="/?match-page=false" target="_top">The team link always opens the fixtures page [default]</a>
+            </p>
+            <br />
+            <p class="body-text">Current setting: @MatchPageSetting</p>
         </section>
     }
 </div>
